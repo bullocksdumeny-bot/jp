@@ -11,14 +11,8 @@ JLPT N5 日语动词活用规则训练器。个人备考工具，单用户。
 npm install
 ```
 
-复制 `.env.example` 为 `.env.local`，然后填三个值：
-
-```bash
-npm run gen-secret                    # 输出 SESSION_SECRET
-npm run hash-password -- "你的密码"   # 输出 APP_PASSWORD_HASH
-```
-
-`DATABASE_URL` 去 [neon.tech](https://neon.tech) 建个免费项目，复制 pooled connection string。
+复制 `.env.example` 为 `.env.local`，然后填写 `DATABASE_URL`。连接串可在
+[neon.tech](https://neon.tech) 项目中复制，使用 pooled connection string。
 
 建表并启动：
 
@@ -27,7 +21,7 @@ npm run db:migrate
 npm run dev
 ```
 
-打开 http://localhost:3000 会跳到登录页，输密码进入。首页有链路自检面板。
+打开 http://localhost:3000 即可进入首页，首页有链路自检面板。
 
 ## 常用命令
 
@@ -43,5 +37,5 @@ npm run dev
 
 ## 部署
 
-Vercel。需要在项目设置里配的环境变量：`DATABASE_URL`、`APP_PASSWORD_HASH`、`SESSION_SECRET`，
-以及 Phase 6 才用得上的 `ANTHROPIC_API_KEY`。
+Vercel。需要在项目设置里配置 `DATABASE_URL`，以及 Phase 6 才用得上的
+`ANTHROPIC_API_KEY`。

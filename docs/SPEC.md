@@ -33,7 +33,7 @@ N4（可能形、意志形、命令形、禁止形、条件形）和 N3（被动
 
 | 阶段 | 内容 | 状态 |
 |---|---|---|
-| 1 | 脚手架 + 部署链路 + 访问保护 | 已完成 |
+| 1 | 脚手架 + 部署链路 | 已完成 |
 | 2 | 第一章 动词分类，含判定模式与陷阱动词库 | — |
 | 3 | 第四章 て形全链路（验证架构是否立得住） | — |
 | 4 | ます形 / ない形 / た形 / たい形 | — |
@@ -70,28 +70,15 @@ N4（可能形、意志形、命令形、禁止形、条件形）和 N3（被动
 
 **大模型不产出活用答案**，只产出讲解文案。见 `CLAUDE.md` 铁律 1。
 
-### 访问保护
+### 访问方式
 
-单密码 → scrypt 校验 → 签发 HS256 JWT（30 天）→ HttpOnly + Secure + SameSite=Lax Cookie。
-`proxy.ts` 拦截除 `/login`、`/api/login` 外的一切路由；页面和 API 内部再各自验一次。
-
-用 `node:crypto` 的 scrypt 而不是 bcrypt，理由是编码不是强度：bcrypt 哈希长成 `$2b$12$...`，
-而 `.env` 文件会做变量展开，`$2b` 会被替换成空串，导致密码校验**静默**失败。
-这里的编码只含 base64url 字符和点，放进任何 env 都安全。同理 `SESSION_SECRET` 用 base64url。
-
-登录失败限流是进程内 Map（15 分钟 8 次）。serverless 多实例下各算各的，挡不住分布式爆破——
-它的作用只是让字典攻击不划算，真正的防线是密码强度，所以 `hash-password` 脚本强制 10 位以上。
-
-未做、也暂不打算做的：CSRF token（无跨站表单提交场景，SameSite=Lax 已覆盖）、
-审计日志、密码轮换流程。
+站点直接访问，不提供账号、密码、Cookie 会话或登录拦截。
 
 ## 五、本地开发
 
 ```bash
 npm install
 cp .env.example .env.local     # 然后填 DATABASE_URL
-npm run gen-secret             # 输出 SESSION_SECRET，填进 .env.local
-npm run hash-password -- "你的密码"   # 输出 APP_PASSWORD_HASH，填进 .env.local
 npm run db:migrate             # 建表
 npm run dev
 ```

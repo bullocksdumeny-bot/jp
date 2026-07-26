@@ -10,14 +10,11 @@
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx scripts/migrate.ts",
-    "db:studio": "drizzle-kit studio",
-    "hash-password": "tsx scripts/hash-password.ts",
-    "gen-secret": "tsx scripts/gen-secret.ts"
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
     "drizzle-orm": "^0.45.2",
-    "jose": "^6.2.4",
     "next": "16.2.12",
     "react": "19.2.4",
     "react-dom": "19.2.4",

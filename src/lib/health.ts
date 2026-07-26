@@ -29,8 +29,6 @@ const message = (error: unknown) =>
 export async function checkHealth(): Promise<Health> {
   const env = {
     DATABASE_URL: Boolean(process.env.DATABASE_URL),
-    APP_PASSWORD_HASH: Boolean(process.env.APP_PASSWORD_HASH),
-    SESSION_SECRET: Boolean(process.env.SESSION_SECRET),
     // Phase 6 才用，缺了不算不健康。
     ANTHROPIC_API_KEY: Boolean(process.env.ANTHROPIC_API_KEY),
   };
@@ -77,8 +75,6 @@ export async function checkHealth(): Promise<Health> {
 
   const ok =
     env.DATABASE_URL &&
-    env.APP_PASSWORD_HASH &&
-    env.SESSION_SECRET &&
     db.connected &&
     db.migrations === "applied";
 

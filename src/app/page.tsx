@@ -1,12 +1,9 @@
 import { checkHealth } from "@/lib/health";
-import { requireSession } from "@/lib/session";
-
-import { LogoutButton } from "./logout-button";
 
 export const dynamic = "force-dynamic";
 
 const ROADMAP = [
-  { phase: "1", name: "脚手架 + 部署链路 + 访问保护", done: true },
+  { phase: "1", name: "脚手架 + 部署链路", done: true },
   { phase: "2", name: "第一章 动词分类（含陷阱动词判定模式）", done: false },
   { phase: "3", name: "第四章 て形全链路（学习 → 规则应用 → 输出 → 掌握度）", done: false },
   { phase: "4", name: "ます形 / ない形 / た形 / たい形", done: false },
@@ -20,7 +17,6 @@ function Dot({ ok, warn = false }: { ok: boolean; warn?: boolean }) {
 }
 
 export default async function HomePage() {
-  await requireSession();
   const health = await checkHealth();
 
   return (
@@ -30,7 +26,6 @@ export default async function HomePage() {
           <h1 className="jp text-2xl font-semibold">動詞活用トレーナー</h1>
           <p className="text-sm text-muted">JLPT N5 动词活用规则训练器</p>
         </div>
-        <LogoutButton />
       </header>
 
       <section className="flex flex-col gap-3">
