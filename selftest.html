@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>engine selfTest</title>
+</head>
+<body>
+  <p>打开控制台（F12）查看 JVT.selfTest() 输出。此页面无 UI，仅作为引擎自检入口，双击即可运行。</p>
+  <script src="data/rules.js"></script>
+  <script src="data/verbs.js"></script>
+  <script src="src/engine.js"></script>
+  <script src="tests/golden.js"></script>
+  <script>
+    window.__result = JVT.selfTest();
+  </script>
+</body>
+</html>
