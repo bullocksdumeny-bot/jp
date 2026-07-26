@@ -7,7 +7,7 @@ const ROADMAP = [
   { phase: "1", name: "脚手架 + 部署链路", done: true },
   { phase: "2", name: "第一章 动词分类（含陷阱动词判定模式）", done: true },
   { phase: "3", name: "第四章 て形全链路（学习 → 规则应用 → 输出 → 掌握度）", done: true },
-  { phase: "4", name: "ます形 / ない形 / た形 / たい形", done: false },
+  { phase: "4", name: "ます形 / ない形 / た形 / たい形", done: true },
   { phase: "5", name: "综合训练 + 错题强化 + 薄弱规则推荐", done: false },
   { phase: "6", name: "内容生成模块接入 Anthropic API", done: false },
 ];
@@ -41,6 +41,30 @@ export default async function HomePage() {
         >
           开始训练
         </Link>
+      </section>
+
+      <section className="rounded-2xl border border-line bg-card p-6">
+        <p className="text-xs font-medium text-accent">N5 活用</p>
+        <h2 className="mt-2 text-xl font-semibold">其他常用变化</h2>
+        <p className="mt-2 text-sm leading-6 text-muted">
+          59 个 N5 核心动词，直接输入答案，按具体词尾规则记录掌握度。
+        </p>
+        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {[
+            ["/masu-form", "ます形"],
+            ["/nai-form", "ない形"],
+            ["/ta-form", "た形"],
+            ["/tai-form", "たい形"],
+          ].map(([href, label]) => (
+            <Link
+              key={href}
+              href={href}
+              className="jp rounded-xl border border-line px-3 py-3 text-center text-sm font-medium hover:border-accent hover:text-accent"
+            >
+              {label}
+            </Link>
+          ))}
+        </div>
       </section>
 
       <section className="rounded-2xl border border-line bg-card p-6">
