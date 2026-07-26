@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { VERBS } from "../src/data/verbs";
 import { classifyVerb, explainClassification } from "../src/lib/classification";
 
-assert.equal(VERBS.length, 25);
+assert.equal(VERBS.length, 26);
 assert.equal(new Set(VERBS.map((verb) => verb.id)).size, VERBS.length);
 assert.ok(VERBS.filter((verb) => verb.trap).length >= 9);
 

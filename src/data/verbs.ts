@@ -26,6 +26,7 @@ export const VERBS: readonly Verb[] = [
   { id: "shinu", dictionary: "死ぬ", reading: "しぬ", meaning: "死", type: "godan", reason: "不以「る」结尾，按五十音行改变末尾假名，是五段动词。" },
   { id: "kau", dictionary: "買う", reading: "かう", meaning: "买", type: "godan", reason: "不以「る」结尾，按五十音行改变末尾假名，是五段动词。" },
   { id: "oyogu", dictionary: "泳ぐ", reading: "およぐ", meaning: "游泳", type: "godan", reason: "不以「る」结尾，按五十音行改变末尾假名，是五段动词。" },
+  { id: "iku", dictionary: "行く", reading: "いく", meaning: "去", type: "godan", trap: true, reason: "「行く」本身是五段动词，但它的て形是需要单独记忆的特例。" },
   { id: "kaeru", dictionary: "帰る", reading: "かえる", meaning: "回去", type: "godan", trap: true, reason: "虽然是「え段＋る」的外形，但「帰る」是必须单独记住的五段陷阱动词。" },
   { id: "hairu", dictionary: "入る", reading: "はいる", meaning: "进入", type: "godan", trap: true, reason: "虽然是「い段＋る」的外形，但「入る」是五段陷阱动词。" },
   { id: "hashiru", dictionary: "走る", reading: "はしる", meaning: "跑", type: "godan", trap: true, reason: "虽然是「い段＋る」的外形，但「走る」是五段陷阱动词。" },

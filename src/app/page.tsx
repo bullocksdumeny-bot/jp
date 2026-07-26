@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 const ROADMAP = [
   { phase: "1", name: "脚手架 + 部署链路", done: true },
   { phase: "2", name: "第一章 动词分类（含陷阱动词判定模式）", done: true },
-  { phase: "3", name: "第四章 て形全链路（学习 → 规则应用 → 输出 → 掌握度）", done: false },
+  { phase: "3", name: "第四章 て形全链路（学习 → 规则应用 → 输出 → 掌握度）", done: true },
   { phase: "4", name: "ます形 / ない形 / た形 / たい形", done: false },
   { phase: "5", name: "综合训练 + 错题强化 + 薄弱规则推荐", done: false },
   { phase: "6", name: "内容生成模块接入 Anthropic API", done: false },
@@ -40,6 +40,20 @@ export default async function HomePage() {
           className="mt-5 inline-flex rounded-xl bg-foreground px-5 py-3 text-sm font-medium text-background"
         >
           开始训练
+        </Link>
+      </section>
+
+      <section className="rounded-2xl border border-line bg-card p-6">
+        <p className="text-xs font-medium text-accent">核心训练</p>
+        <h2 className="jp mt-2 text-xl font-semibold">て形输出</h2>
+        <p className="mt-2 text-sm leading-6 text-muted">
+          直接输入变形结果，覆盖全部规则和「行く」特例，写错会给完整推理链。
+        </p>
+        <Link
+          href="/te-form"
+          className="mt-5 inline-flex rounded-xl bg-foreground px-5 py-3 text-sm font-medium text-background"
+        >
+          开始て形训练
         </Link>
       </section>
 

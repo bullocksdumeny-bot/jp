@@ -1,10 +1,8 @@
 import { NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
 import { z } from "zod";
 
-import { getDb } from "@/db";
-import { attempts, ruleMastery } from "@/db/schema";
 import { findVerb, VERB_TYPES } from "@/data/verbs";
+import { recordAttempt } from "@/lib/attempts";
 import {
   classifyVerb,
   explainClassification,
@@ -32,9 +30,7 @@ export async function POST(request: Request) {
 
   const expected = classifyVerb(verb);
   const isCorrect = parsed.data.answer === expected;
-  const db = getDb();
-
-  await db.insert(attempts).values({
+  const stats = await recordAttempt({
     ruleId: "skill-classify",
     verbId: verb.id,
     mode: "classify",
@@ -45,51 +41,11 @@ export async function POST(request: Request) {
     elapsedMs: parsed.data.elapsedMs,
   });
 
-  const [current] = await db
-    .select()
-    .from(ruleMastery)
-    .where(eq(ruleMastery.ruleId, "skill-classify"))
-    .limit(1);
-
-  const attemptCount = (current?.attemptCount ?? 0) + 1;
-  const correctCount = (current?.correctCount ?? 0) + (isCorrect ? 1 : 0);
-  const streak = isCorrect ? (current?.streak ?? 0) + 1 : 0;
-  const mastery =
-    current == null
-      ? isCorrect ? 1 : 0
-      : current.mastery * 0.8 + (isCorrect ? 0.2 : 0);
-
-  await db
-    .insert(ruleMastery)
-    .values({
-      ruleId: "skill-classify",
-      attemptCount,
-      correctCount,
-      streak,
-      mastery,
-      lastPracticedAt: new Date(),
-    })
-    .onConflictDoUpdate({
-      target: ruleMastery.ruleId,
-      set: {
-        attemptCount,
-        correctCount,
-        streak,
-        mastery,
-        lastPracticedAt: new Date(),
-      },
-    });
-
   return NextResponse.json({
     isCorrect,
     expected,
     expectedLabel: VERB_TYPE_LABELS[expected],
     explanation: explainClassification(verb),
-    stats: {
-      attemptCount,
-      correctCount,
-      streak,
-      accuracy: Math.round((correctCount / attemptCount) * 100),
-    },
+    stats,
   });
 }
