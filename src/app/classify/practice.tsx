@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 import type { Verb, VerbType } from "@/data/verbs";
 import { VERB_TYPE_LABELS } from "@/lib/classification";
@@ -29,8 +29,9 @@ export function ClassificationPractice({
 }: {
   verbs: readonly Verb[];
 }) {
-  const initialOrder = useMemo(() => shuffledIndices(verbs.length), [verbs.length]);
-  const [order, setOrder] = useState(initialOrder);
+  const [order, setOrder] = useState(() =>
+    Array.from({ length: verbs.length }, (_, index) => index),
+  );
   const [position, setPosition] = useState(0);
   const [result, setResult] = useState<Result | null>(null);
   const [pending, setPending] = useState(false);
