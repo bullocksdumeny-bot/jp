@@ -1,10 +1,11 @@
 import { checkHealth } from "@/lib/health";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
 const ROADMAP = [
   { phase: "1", name: "脚手架 + 部署链路", done: true },
-  { phase: "2", name: "第一章 动词分类（含陷阱动词判定模式）", done: false },
+  { phase: "2", name: "第一章 动词分类（含陷阱动词判定模式）", done: true },
   { phase: "3", name: "第四章 て形全链路（学习 → 规则应用 → 输出 → 掌握度）", done: false },
   { phase: "4", name: "ます形 / ない形 / た形 / たい形", done: false },
   { phase: "5", name: "综合训练 + 错题强化 + 薄弱规则推荐", done: false },
@@ -27,6 +28,20 @@ export default async function HomePage() {
           <p className="text-sm text-muted">JLPT N5 动词活用规则训练器</p>
         </div>
       </header>
+
+      <section className="rounded-2xl border border-line bg-card p-6">
+        <p className="text-xs font-medium text-accent">现在可以练</p>
+        <h2 className="mt-2 text-xl font-semibold">动词分类</h2>
+        <p className="mt-2 text-sm leading-6 text-muted">
+          判断一段、五段和不规则动词，包含常见陷阱词。答完立即看理由。
+        </p>
+        <Link
+          href="/classify"
+          className="mt-5 inline-flex rounded-xl bg-foreground px-5 py-3 text-sm font-medium text-background"
+        >
+          开始训练
+        </Link>
+      </section>
 
       <section className="flex flex-col gap-3">
         <h2 className="text-sm font-medium text-muted">链路自检</h2>
