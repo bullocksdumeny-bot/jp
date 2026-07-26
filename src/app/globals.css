@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+/*
+ * 不用 next/font/google：构建时要连 Google Fonts，在国内网络下会让
+ * 本地 build 直接失败。系统字体栈在 Windows / macOS / iOS 上都能正确
+ * 渲染日文汉字与假名，对这个项目完全够用。
+ */
+@theme {
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN",
+    "Yu Gothic UI", Meiryo, "Noto Sans CJK JP", "Microsoft YaHei", sans-serif;
+  --font-jp:
+    "Hiragino Kaku Gothic ProN", "Yu Gothic", "Yu Gothic UI", Meiryo,
+    "Noto Sans CJK JP", "MS Gothic", sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", "Segoe UI Mono", Menlo, monospace;
+}
+
+:root {
+  --background: #fbfbfa;
+  --foreground: #1a1a19;
+  --muted: #6b6b68;
+  --line: #e4e4e1;
+  --card: #ffffff;
+  --accent: #b4472f;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #131313;
+    --foreground: #ebebe9;
+    --muted: #9a9a96;
+    --line: #2b2b2a;
+    --card: #1c1c1b;
+    --accent: #e5795c;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-card: var(--card);
+  --color-accent: var(--accent);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 日文动词、活用形专用：字距略松，便于逐字看清送假名 */
+.jp {
+  font-family: var(--font-jp);
+  font-feature-settings: "palt" 0;
+  letter-spacing: 0.02em;
+}
