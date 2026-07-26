@@ -1,11 +1,18 @@
 import assert from "node:assert/strict";
 
 import { VERBS } from "../src/data/verbs";
+import { N5_CORE_VERB_IDS } from "../src/data/n5-core";
 import { classifyVerb, explainClassification } from "../src/lib/classification";
 
-assert.equal(VERBS.length, 26);
+assert.equal(N5_CORE_VERB_IDS.length, 59);
+assert.equal(new Set(N5_CORE_VERB_IDS).size, 59);
+assert.ok(VERBS.length >= 59);
 assert.equal(new Set(VERBS.map((verb) => verb.id)).size, VERBS.length);
 assert.ok(VERBS.filter((verb) => verb.trap).length >= 9);
+
+for (const id of N5_CORE_VERB_IDS) {
+  assert.ok(VERBS.some((verb) => verb.id === id), `缺少 N5 核心动词：${id}`);
+}
 
 for (const verb of VERBS) {
   assert.equal(classifyVerb(verb), verb.type);

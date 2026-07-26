@@ -1,10 +1,16 @@
 import assert from "node:assert/strict";
 
 import { TE_FORMS, TE_RULES, explainTeForm } from "../src/data/te-forms";
-import { VERBS } from "../src/data/verbs";
+import { N5_CORE_VERB_IDS } from "../src/data/n5-core";
 
-assert.equal(TE_FORMS.length, VERBS.length);
-assert.equal(new Set(TE_FORMS.map((entry) => entry.verbId)).size, VERBS.length);
+assert.equal(TE_FORMS.length, N5_CORE_VERB_IDS.length);
+assert.equal(
+  new Set(TE_FORMS.map((entry) => entry.verbId)).size,
+  N5_CORE_VERB_IDS.length,
+);
+for (const id of N5_CORE_VERB_IDS) {
+  assert.ok(TE_FORMS.some((entry) => entry.verbId === id), `缺少 N5 て形：${id}`);
+}
 
 const ruleIds = new Set(TE_RULES.map((rule) => rule.id));
 for (const entry of TE_FORMS) {
