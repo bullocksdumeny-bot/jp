@@ -3,11 +3,14 @@
 import { useEffect, useState, type FormEvent } from "react";
 
 import { RuleHint } from "@/app/components/rule-hint";
+import { ConjugationFeedback } from "@/app/components/conjugation-feedback";
 import { VERB_TYPE_LABELS } from "@/lib/classification";
 import type { Verb, VerbType } from "@/data/verbs";
+import type { ConjugationFeedback as Feedback } from "@/lib/conjugation-feedback";
 import {
   buildTargetedQuestions,
   formFromKind,
+  listRuleTrainingOptions,
   QUESTION_LABELS,
   ruleHintForQuestion,
   type TrainingQuestion,
@@ -17,6 +20,7 @@ type Result = {
   isCorrect: boolean;
   expected: string;
   explanation: string;
+  feedback?: Feedback | null;
   stats: {
     attemptCount: number;
     correctCount: number;
@@ -54,6 +58,7 @@ export function TrainingCenter({
   const [answer, setAnswer] = useState("");
   const [result, setResult] = useState<Result | null>(null);
   const [pending, setPending] = useState(false);
+  const ruleOptions = listRuleTrainingOptions();
 
   const queue =
     mode === "mixed"
@@ -69,6 +74,14 @@ export function TrainingCenter({
 
   function switchMode(nextMode: Mode) {
     setMode(nextMode);
+    setPosition(0);
+    setAnswer("");
+    setResult(null);
+  }
+
+  function selectRule(ruleId: string) {
+    setTargetedQueue(buildTargetedQuestions([ruleId], 8));
+    setMode("targeted");
     setPosition(0);
     setAnswer("");
     setResult(null);
@@ -177,7 +190,7 @@ export function TrainingCenter({
               : "text-muted"
           }`}
         >
-          针对训练（{targetedQueue.length}）
+          规则专项（{targetedQueue.length}）
         </button>
         <button
           type="button"
@@ -198,6 +211,37 @@ export function TrainingCenter({
           错题强化（{reviewQueue.length}）
         </button>
       </div>
+
+      {mode === "targeted" && (
+        <section className="rounded-2xl border border-line bg-card p-5">
+          <label
+            htmlFor="rule-training-select"
+            className="text-sm font-semibold"
+          >
+            按规则专项训练
+          </label>
+          <p className="mt-1 text-xs leading-5 text-muted">
+            选择一条规则，连续练习同类词尾变化，再回到综合训练。
+          </p>
+          <select
+            id="rule-training-select"
+            defaultValue=""
+            onChange={(event) => {
+              if (event.target.value) selectRule(event.target.value);
+            }}
+            className="mt-3 w-full rounded-xl border border-line bg-background px-3 py-3 text-sm"
+          >
+            <option value="" disabled>
+              选择活用规则
+            </option>
+            {ruleOptions.map((option) => (
+              <option key={option.ruleId} value={option.ruleId}>
+                {option.label}（{option.questionCount} 个动词）
+              </option>
+            ))}
+          </select>
+        </section>
+      )}
 
       {!question || !verb ? (
         <section className="rounded-2xl border border-emerald-300 bg-emerald-50 p-7 text-center dark:border-emerald-900 dark:bg-emerald-950">
@@ -284,7 +328,14 @@ export function TrainingCenter({
               <p className="text-lg font-semibold">
                 {result.isCorrect ? "答对了" : `正确答案：${result.expected}`}
               </p>
-              <p className="jp mt-3 text-sm leading-7">{result.explanation}</p>
+              {(!result.feedback || result.isCorrect) && (
+                <p className="jp mt-3 text-sm leading-7">
+                  {result.explanation}
+                </p>
+              )}
+              {!result.isCorrect && result.feedback && (
+                <ConjugationFeedback feedback={result.feedback} />
+              )}
               <div className="mt-4 flex flex-wrap gap-x-5 gap-y-1 border-t border-current/15 pt-3 text-xs text-muted">
                 <span>本规则累计 {result.stats.attemptCount} 题</span>
                 <span>正确率 {result.stats.accuracy}%</span>

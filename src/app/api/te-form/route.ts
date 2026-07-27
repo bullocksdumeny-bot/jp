@@ -4,6 +4,7 @@ import { z } from "zod";
 import { findTeForm, explainTeForm } from "@/data/te-forms";
 import { findVerb } from "@/data/verbs";
 import { recordAttempt } from "@/lib/attempts";
+import { buildConjugationFeedback } from "@/lib/conjugation-feedback";
 
 export const runtime = "nodejs";
 
@@ -46,6 +47,9 @@ export async function POST(request: Request) {
     isCorrect,
     expected: entry.answer,
     explanation: explainTeForm(entry),
+    feedback: isCorrect
+      ? null
+      : buildConjugationFeedback(verb, "te", answer),
     stats,
   });
 }

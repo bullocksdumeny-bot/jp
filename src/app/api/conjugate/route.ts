@@ -9,6 +9,7 @@ import {
   FORM_LABELS,
   FORM_TYPES,
 } from "@/lib/conjugation";
+import { buildConjugationFeedback } from "@/lib/conjugation-feedback";
 
 export const runtime = "nodejs";
 
@@ -54,6 +55,9 @@ export async function POST(request: Request) {
     isCorrect,
     expected: result.answer,
     explanation: result.explanation,
+    feedback: isCorrect
+      ? null
+      : buildConjugationFeedback(verb, parsed.data.form, answer),
     stats,
   });
 }

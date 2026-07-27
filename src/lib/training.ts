@@ -114,6 +114,28 @@ export function buildTargetedQuestions(
   return questions;
 }
 
+export type RuleTrainingOption = {
+  ruleId: string;
+  label: string;
+  questionCount: number;
+};
+
+export function listRuleTrainingOptions(): RuleTrainingOption[] {
+  const counts = new Map<string, number>();
+  for (const verbId of N5_CORE_VERB_IDS) {
+    for (const kind of QUESTION_KINDS) {
+      if (kind === "classify") continue;
+      const ruleId = ruleIdForQuestion({ verbId, kind });
+      if (ruleId) counts.set(ruleId, (counts.get(ruleId) ?? 0) + 1);
+    }
+  }
+  return [...counts].map(([ruleId, questionCount]) => ({
+    ruleId,
+    label: ruleLabel(ruleId),
+    questionCount,
+  }));
+}
+
 export type RuleHintContent = {
   label: string;
   text: string;

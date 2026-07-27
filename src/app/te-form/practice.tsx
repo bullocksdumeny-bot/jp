@@ -3,13 +3,16 @@
 import { useState, type FormEvent } from "react";
 
 import { RuleHint } from "@/app/components/rule-hint";
+import { ConjugationFeedback } from "@/app/components/conjugation-feedback";
 import type { Verb } from "@/data/verbs";
+import type { ConjugationFeedback as Feedback } from "@/lib/conjugation-feedback";
 import { ruleHintForQuestion } from "@/lib/training";
 
 type Result = {
   isCorrect: boolean;
   expected: string;
   explanation: string;
+  feedback: Feedback | null;
   stats: {
     attemptCount: number;
     correctCount: number;
@@ -115,7 +118,12 @@ export function TeFormPractice({
           <p className="text-lg font-semibold">
             {result.isCorrect ? "答对了" : `正确答案：${result.expected}`}
           </p>
-          <p className="jp mt-3 text-sm leading-7">{result.explanation}</p>
+          {result.isCorrect && (
+            <p className="jp mt-3 text-sm leading-7">{result.explanation}</p>
+          )}
+          {!result.isCorrect && result.feedback && (
+            <ConjugationFeedback feedback={result.feedback} />
+          )}
           <div className="mt-4 flex flex-wrap gap-x-5 gap-y-1 border-t border-current/15 pt-3 text-xs text-muted">
             <span>本规则累计 {result.stats.attemptCount} 题</span>
             <span>正确率 {result.stats.accuracy}%</span>

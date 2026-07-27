@@ -7,6 +7,7 @@ import { conjugate, FORM_TYPES } from "../src/lib/conjugation";
 import {
   buildTargetedQuestions,
   kindFromRuleId,
+  listRuleTrainingOptions,
   QUESTION_KINDS,
   routeForKind,
   ruleHintForQuestion,
@@ -47,5 +48,9 @@ assert.deepEqual(
   [...new Set(targeted.map((question) => ruleIdForQuestion(question)))],
   ["te-ku", "nai-aru"],
 );
+
+const options = listRuleTrainingOptions();
+assert.ok(options.some((option) => option.ruleId === "te-mu-bu-nu"));
+assert.ok(options.every((option) => option.questionCount > 0));
 
 console.log("综合训练规则映射验证通过。");
