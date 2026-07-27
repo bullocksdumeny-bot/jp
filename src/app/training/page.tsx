@@ -14,6 +14,7 @@ import {
 } from "@/lib/training";
 
 import { TrainingCenter } from "./training-center";
+import { WeakRuleAdvice } from "./weak-rule-advice";
 
 export const metadata = { title: "综合训练 · 動詞活用トレーナー" };
 export const dynamic = "force-dynamic";
@@ -62,33 +63,17 @@ export default async function TrainingPage() {
       </header>
 
       {masteryRows.length > 0 && (
-        <section className="rounded-2xl border border-line bg-card p-5">
-          <h2 className="font-semibold">优先复习这些薄弱规则</h2>
-          <div className="mt-4 grid gap-2 sm:grid-cols-2">
-            {masteryRows.map((row) => {
-              const kind = kindFromRuleId(row.ruleId);
-              const mastery = Math.round(row.mastery * 100);
-              return (
-                <Link
-                  key={row.ruleId}
-                  href={kind ? routeForKind(kind) : "/training"}
-                  className="rounded-xl bg-background px-4 py-3 hover:ring-1 hover:ring-accent"
-                >
-                  <div className="flex items-center justify-between gap-3 text-sm">
-                    <span className="font-medium">{ruleLabel(row.ruleId)}</span>
-                    <span className="text-muted">{mastery}%</span>
-                  </div>
-                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-line">
-                    <div
-                      className="h-full rounded-full bg-accent"
-                      style={{ width: `${mastery}%` }}
-                    />
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
+        <WeakRuleAdvice
+          rules={masteryRows.map((row) => {
+            const kind = kindFromRuleId(row.ruleId);
+            return {
+              ruleId: row.ruleId,
+              label: ruleLabel(row.ruleId),
+              mastery: Math.round(row.mastery * 100),
+              href: kind ? routeForKind(kind) : "/training",
+            };
+          })}
+        />
       )}
 
       <TrainingCenter

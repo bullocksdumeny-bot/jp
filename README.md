@@ -47,3 +47,7 @@ npm run dev
 
 Vercel。需要在项目设置里配置 `DATABASE_URL`，以及内容生成模块使用的
 `DEEPSEEK_API_KEY`。
+
+综合训练页的薄弱规则卡片可按需生成复习提示。DeepSeek 只生成记忆与复习文案，
+活用答案、规则匹配和判题始终由本地确定性引擎完成；生成结果会写入
+`generated_content`，相同规则再次访问不会重复调用模型。
