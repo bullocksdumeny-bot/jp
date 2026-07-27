@@ -29,8 +29,8 @@ const message = (error: unknown) =>
 export async function checkHealth(): Promise<Health> {
   const env = {
     DATABASE_URL: Boolean(process.env.DATABASE_URL),
-    // Phase 6 才用，缺了不算不健康。
-    ANTHROPIC_API_KEY: Boolean(process.env.ANTHROPIC_API_KEY),
+    // 内容生成模块使用，缺了不算不健康。
+    DEEPSEEK_API_KEY: Boolean(process.env.DEEPSEEK_API_KEY),
   };
 
   const startedAt = Date.now();

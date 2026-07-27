@@ -45,5 +45,5 @@ npm run dev
 
 ## 部署
 
-Vercel。需要在项目设置里配置 `DATABASE_URL`，以及 Phase 6 才用得上的
-`ANTHROPIC_API_KEY`。
+Vercel。需要在项目设置里配置 `DATABASE_URL`，以及内容生成模块使用的
+`DEEPSEEK_API_KEY`。

@@ -119,11 +119,11 @@ export default async function HomePage() {
           )}
 
           <div className="flex items-center gap-2.5">
-            <Dot ok={health.env.ANTHROPIC_API_KEY} warn />
+            <Dot ok={health.env.DEEPSEEK_API_KEY} warn />
             <span>
-              {health.env.ANTHROPIC_API_KEY
-                ? "内容生成 API Key 已配置"
-                : "内容生成 API Key 未配置（Phase 6 才需要）"}
+              {health.env.DEEPSEEK_API_KEY
+                ? "DeepSeek API Key 已配置"
+                : "DeepSeek API Key 未配置（内容生成阶段才需要）"}
             </span>
           </div>
 

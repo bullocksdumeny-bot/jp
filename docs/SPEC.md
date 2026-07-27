@@ -63,7 +63,7 @@ N4（可能形、意志形、命令形、禁止形、条件形）和 N3（被动
 
 ### 内容生成
 
-`getContent(kind, cacheKey)`：查 `generated_content` → 命中即返回 → 未命中才调 Anthropic API
+`getContent(kind, cacheKey)`：查 `generated_content` → 命中即返回 → 未命中才调 DeepSeek API
 → zod 校验结构 → 写库 → 返回。缓存键含 `promptVersion` 与 `model`。
 
 另配预生成脚本，可一次性把 N5 全部规则讲解灌进库，正式使用时不会卡在等 LLM 生成。
