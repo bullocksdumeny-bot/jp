@@ -1,0 +1,101 @@
+import { desc } from "drizzle-orm";
+import Link from "next/link";
+
+import { getDb } from "@/db";
+import { attempts, ruleMastery } from "@/db/schema";
+import { N5_CORE_VERB_IDS } from "@/data/n5-core";
+import { VERBS } from "@/data/verbs";
+import {
+  kindFromRuleId,
+  QUESTION_KINDS,
+  routeForKind,
+  ruleLabel,
+  type TrainingQuestion,
+} from "@/lib/training";
+
+import { TrainingCenter } from "./training-center";
+
+export const metadata = { title: "综合训练 · 動詞活用トレーナー" };
+export const dynamic = "force-dynamic";
+
+export default async function TrainingPage() {
+  const db = getDb();
+  const [recentAttempts, masteryRows] = await Promise.all([
+    db.select().from(attempts).orderBy(desc(attempts.createdAt)).limit(300),
+    db
+      .select()
+      .from(ruleMastery)
+      .orderBy(ruleMastery.mastery, desc(ruleMastery.attemptCount))
+      .limit(6),
+  ]);
+
+  const latest = new Map<string, TrainingQuestion & { isCorrect: boolean }>();
+  for (const attempt of recentAttempts) {
+    if (!attempt.verbId) continue;
+    const kind = kindFromRuleId(attempt.ruleId);
+    if (!kind) continue;
+    const key = `${attempt.verbId}:${kind}`;
+    if (!latest.has(key)) {
+      latest.set(key, { verbId: attempt.verbId, kind, isCorrect: attempt.isCorrect });
+    }
+  }
+  const reviewQuestions = [...latest.values()]
+    .filter((question) => !question.isCorrect)
+    .map(({ verbId, kind }) => ({ verbId, kind }));
+
+  const mixedQuestions: TrainingQuestion[] = N5_CORE_VERB_IDS.map(
+    (verbId, index) => ({
+      verbId,
+      kind: QUESTION_KINDS[index % QUESTION_KINDS.length],
+    }),
+  );
+  return (
+    <main className="mx-auto flex min-h-dvh w-full max-w-2xl flex-col gap-8 px-6 py-10">
+      <header>
+        <Link href="/" className="text-sm text-muted hover:text-foreground">
+          ← 返回首页
+        </Link>
+        <h1 className="mt-5 text-2xl font-semibold">综合训练中心</h1>
+        <p className="mt-2 text-sm leading-6 text-muted">
+          混合分类与五种活用；错题按最新作答状态自动强化。
+        </p>
+      </header>
+
+      {masteryRows.length > 0 && (
+        <section className="rounded-2xl border border-line bg-card p-5">
+          <h2 className="font-semibold">优先复习这些薄弱规则</h2>
+          <div className="mt-4 grid gap-2 sm:grid-cols-2">
+            {masteryRows.map((row) => {
+              const kind = kindFromRuleId(row.ruleId);
+              const mastery = Math.round(row.mastery * 100);
+              return (
+                <Link
+                  key={row.ruleId}
+                  href={kind ? routeForKind(kind) : "/training"}
+                  className="rounded-xl bg-background px-4 py-3 hover:ring-1 hover:ring-accent"
+                >
+                  <div className="flex items-center justify-between gap-3 text-sm">
+                    <span className="font-medium">{ruleLabel(row.ruleId)}</span>
+                    <span className="text-muted">{mastery}%</span>
+                  </div>
+                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-line">
+                    <div
+                      className="h-full rounded-full bg-accent"
+                      style={{ width: `${mastery}%` }}
+                    />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      <TrainingCenter
+        verbs={VERBS}
+        mixedQuestions={mixedQuestions}
+        reviewQuestions={reviewQuestions}
+      />
+    </main>
+  );
+}

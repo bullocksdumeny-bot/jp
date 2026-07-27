@@ -8,7 +8,7 @@ const ROADMAP = [
   { phase: "2", name: "第一章 动词分类（含陷阱动词判定模式）", done: true },
   { phase: "3", name: "第四章 て形全链路（学习 → 规则应用 → 输出 → 掌握度）", done: true },
   { phase: "4", name: "ます形 / ない形 / た形 / たい形", done: true },
-  { phase: "5", name: "综合训练 + 错题强化 + 薄弱规则推荐", done: false },
+  { phase: "5", name: "综合训练 + 错题强化 + 薄弱规则推荐", done: true },
   { phase: "6", name: "内容生成模块接入 Anthropic API", done: false },
 ];
 
@@ -40,6 +40,20 @@ export default async function HomePage() {
           className="mt-5 inline-flex rounded-xl bg-foreground px-5 py-3 text-sm font-medium text-background"
         >
           开始训练
+        </Link>
+      </section>
+
+      <section className="rounded-2xl border border-accent/40 bg-card p-6">
+        <p className="text-xs font-medium text-accent">推荐入口</p>
+        <h2 className="mt-2 text-xl font-semibold">综合训练中心</h2>
+        <p className="mt-2 text-sm leading-6 text-muted">
+          混合全部 N5 题型，自动收集错题，并根据规则掌握度安排薄弱项。
+        </p>
+        <Link
+          href="/training"
+          className="mt-5 inline-flex rounded-xl bg-accent px-5 py-3 text-sm font-medium text-white"
+        >
+          开始综合训练
         </Link>
       </section>
 
