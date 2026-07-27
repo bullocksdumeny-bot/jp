@@ -5,9 +5,11 @@ import { findTeForm } from "../src/data/te-forms";
 import { findVerb } from "../src/data/verbs";
 import { conjugate, FORM_TYPES } from "../src/lib/conjugation";
 import {
+  buildTargetedQuestions,
   kindFromRuleId,
   QUESTION_KINDS,
   routeForKind,
+  ruleIdForQuestion,
   ruleLabel,
 } from "../src/lib/training";
 
@@ -31,5 +33,12 @@ for (const id of N5_CORE_VERB_IDS) {
 for (const kind of QUESTION_KINDS) {
   assert.ok(routeForKind(kind).startsWith("/"));
 }
+
+const targeted = buildTargetedQuestions(["te-ku", "nai-aru"], 3);
+assert.equal(targeted.length, 4);
+assert.deepEqual(
+  [...new Set(targeted.map((question) => ruleIdForQuestion(question)))],
+  ["te-ku", "nai-aru"],
+);
 
 console.log("综合训练规则映射验证通过。");

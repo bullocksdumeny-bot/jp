@@ -6,6 +6,7 @@ import { attempts, ruleMastery } from "@/db/schema";
 import { N5_CORE_VERB_IDS } from "@/data/n5-core";
 import { VERBS } from "@/data/verbs";
 import {
+  buildTargetedQuestions,
   kindFromRuleId,
   QUESTION_KINDS,
   routeForKind,
@@ -15,6 +16,7 @@ import {
 
 import { TrainingCenter } from "./training-center";
 import { WeakRuleAdvice } from "./weak-rule-advice";
+import { DailyDiagnosis } from "./daily-diagnosis";
 
 export const metadata = { title: "综合训练 · 動詞活用トレーナー" };
 export const dynamic = "force-dynamic";
@@ -50,6 +52,9 @@ export default async function TrainingPage() {
       kind: QUESTION_KINDS[index % QUESTION_KINDS.length],
     }),
   );
+  const targetedQuestions = buildTargetedQuestions(
+    masteryRows.slice(0, 3).map((row) => row.ruleId),
+  );
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-2xl flex-col gap-8 px-6 py-10">
       <header>
@@ -61,6 +66,8 @@ export default async function TrainingPage() {
           混合分类与五种活用；错题按最新作答状态自动强化。
         </p>
       </header>
+
+      <DailyDiagnosis />
 
       {masteryRows.length > 0 && (
         <WeakRuleAdvice
@@ -80,6 +87,7 @@ export default async function TrainingPage() {
         verbs={VERBS}
         mixedQuestions={mixedQuestions}
         reviewQuestions={reviewQuestions}
+        targetedQuestions={targetedQuestions}
       />
     </main>
   );

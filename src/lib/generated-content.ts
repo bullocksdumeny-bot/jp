@@ -41,10 +41,10 @@ export const ruleLessonSchema = ruleLessonShape.superRefine((lesson, context) =>
 
 export type RuleLesson = z.infer<typeof ruleLessonSchema>;
 
-const UNSAFE_GENERATED_TEXT =
+export const UNSAFE_GENERATED_TEXT =
   /[\u3040-\u30ffA-Za-z0-9→⇒]|例如|比如|如：|例：/;
 
-function safeGeneratedText(value: string, fallback: string): string {
+export function safeGeneratedText(value: string, fallback: string): string {
   return UNSAFE_GENERATED_TEXT.test(value) ? fallback : value;
 }
 

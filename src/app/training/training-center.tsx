@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 
 import { VERB_TYPE_LABELS } from "@/lib/classification";
 import type { Verb, VerbType } from "@/data/verbs";
 import {
+  buildTargetedQuestions,
   formFromKind,
   QUESTION_LABELS,
   type TrainingQuestion,
@@ -22,7 +23,7 @@ type Result = {
   };
 };
 
-type Mode = "mixed" | "review";
+type Mode = "mixed" | "review" | "targeted";
 
 function shuffled<T>(items: readonly T[]): T[] {
   return [...items].sort(() => Math.random() - 0.5);
@@ -32,22 +33,32 @@ export function TrainingCenter({
   verbs,
   mixedQuestions,
   reviewQuestions,
+  targetedQuestions,
 }: {
   verbs: readonly Verb[];
   mixedQuestions: readonly TrainingQuestion[];
   reviewQuestions: readonly TrainingQuestion[];
+  targetedQuestions: readonly TrainingQuestion[];
 }) {
   const [mode, setMode] = useState<Mode>(
     reviewQuestions.length > 0 ? "review" : "mixed",
   );
   const [mixedQueue, setMixedQueue] = useState(() => [...mixedQuestions]);
   const [reviewQueue, setReviewQueue] = useState(() => [...reviewQuestions]);
+  const [targetedQueue, setTargetedQueue] = useState(() => [
+    ...targetedQuestions,
+  ]);
   const [position, setPosition] = useState(0);
   const [answer, setAnswer] = useState("");
   const [result, setResult] = useState<Result | null>(null);
   const [pending, setPending] = useState(false);
 
-  const queue = mode === "mixed" ? mixedQueue : reviewQueue;
+  const queue =
+    mode === "mixed"
+      ? mixedQueue
+      : mode === "review"
+        ? reviewQueue
+        : targetedQueue;
   const question = queue[position];
   const verb = question
     ? verbs.find((item) => item.id === question.verbId)
@@ -59,6 +70,22 @@ export function TrainingCenter({
     setAnswer("");
     setResult(null);
   }
+
+  useEffect(() => {
+    const start = (event: Event) => {
+      const ruleIds = (event as CustomEvent<{ ruleIds?: string[] }>).detail
+        ?.ruleIds;
+      if (ruleIds?.length) {
+        setTargetedQueue(buildTargetedQuestions(ruleIds));
+      }
+      setMode("targeted");
+      setPosition(0);
+      setAnswer("");
+      setResult(null);
+    };
+    window.addEventListener("start-targeted-training", start);
+    return () => window.removeEventListener("start-targeted-training", start);
+  }, []);
 
   async function send(selectedAnswer: string) {
     if (!question || !verb || pending || result) return;
@@ -120,8 +147,12 @@ export function TrainingCenter({
       setPosition(0);
     } else {
       const nextPosition = position + 1;
-      if (nextPosition >= mixedQueue.length) {
-        setMixedQueue(shuffled(mixedQueue));
+      if (nextPosition >= queue.length) {
+        if (mode === "mixed") {
+          setMixedQueue(shuffled(mixedQueue));
+        } else {
+          setTargetedQueue(shuffled(targetedQueue));
+        }
         setPosition(0);
       } else {
         setPosition(nextPosition);
@@ -132,8 +163,19 @@ export function TrainingCenter({
   }
 
   return (
-    <div className="flex flex-col gap-7">
-      <div className="grid grid-cols-2 rounded-xl border border-line bg-card p-1">
+    <div id="training-center" className="flex scroll-mt-6 flex-col gap-7">
+      <div className="grid grid-cols-3 rounded-xl border border-line bg-card p-1">
+        <button
+          type="button"
+          onClick={() => switchMode("targeted")}
+          className={`rounded-lg px-2 py-2.5 text-sm font-medium ${
+            mode === "targeted"
+              ? "bg-foreground text-background"
+              : "text-muted"
+          }`}
+        >
+          针对训练（{targetedQueue.length}）
+        </button>
         <button
           type="button"
           onClick={() => switchMode("mixed")}
@@ -156,8 +198,12 @@ export function TrainingCenter({
 
       {!question || !verb ? (
         <section className="rounded-2xl border border-emerald-300 bg-emerald-50 p-7 text-center dark:border-emerald-900 dark:bg-emerald-950">
-          <p className="text-lg font-semibold">当前没有待强化错题</p>
-          <p className="mt-2 text-sm text-muted">去综合训练做几题，错题会自动进入这里。</p>
+          <p className="text-lg font-semibold">
+            {mode === "targeted" ? "暂时没有薄弱规则" : "当前没有待强化错题"}
+          </p>
+          <p className="mt-2 text-sm text-muted">
+            去综合训练做几题，系统会根据记录自动安排。
+          </p>
           <button
             type="button"
             onClick={() => switchMode("mixed")}
@@ -172,6 +218,7 @@ export function TrainingCenter({
             <p className="mb-2 text-xs font-medium text-accent">
               {QUESTION_LABELS[question.kind]}
               {mode === "review" ? " · 错题强化" : ""}
+              {mode === "targeted" ? " · 今日针对训练" : ""}
             </p>
             <h2 className="jp text-5xl font-semibold">{verb.dictionary}</h2>
             <p className="jp mt-2 text-lg text-muted">{verb.reading}</p>

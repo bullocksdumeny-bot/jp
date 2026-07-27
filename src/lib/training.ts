@@ -1,4 +1,8 @@
 import type { FormType } from "./conjugation";
+import { conjugate } from "./conjugation";
+import { N5_CORE_VERB_IDS } from "@/data/n5-core";
+import { findTeForm } from "@/data/te-forms";
+import { findVerb } from "@/data/verbs";
 
 export const QUESTION_KINDS = [
   "classify",
@@ -74,4 +78,38 @@ export function ruleLabel(ruleId: string): string {
   if (ruleId.includes("u-tsu-ru")) return `${formLabel} · う・つ・る`;
   if (ruleId.includes("mu-bu-nu")) return `${formLabel} · む・ぶ・ぬ`;
   return formLabel;
+}
+
+export function ruleIdForQuestion(
+  question: TrainingQuestion,
+): string | null {
+  if (question.kind === "classify") return "skill-classify";
+  if (question.kind === "te") {
+    return findTeForm(question.verbId)?.ruleId ?? null;
+  }
+  const verb = findVerb(question.verbId);
+  const form = formFromKind(question.kind);
+  if (!verb || !form) return null;
+  return conjugate(verb, form).ruleId;
+}
+
+export function buildTargetedQuestions(
+  ruleIds: readonly string[],
+  perRule = 5,
+): TrainingQuestion[] {
+  const questions: TrainingQuestion[] = [];
+  for (const ruleId of ruleIds) {
+    let added = 0;
+    for (const verbId of N5_CORE_VERB_IDS) {
+      for (const kind of QUESTION_KINDS) {
+        const question = { verbId, kind };
+        if (ruleIdForQuestion(question) !== ruleId) continue;
+        questions.push(question);
+        added += 1;
+        if (added >= perRule) break;
+      }
+      if (added >= perRule) break;
+    }
+  }
+  return questions;
 }
