@@ -64,7 +64,7 @@ export const VERBS: readonly Verb[] = [
   { id: "utau", dictionary: "歌う", reading: "うたう", meaning: "唱歌", type: "godan", reason: "不以「る」结尾，按五十音行改变末尾假名，是五段动词。" },
   { id: "hajimaru", dictionary: "始まる", reading: "はじまる", meaning: "开始", type: "godan", reason: "末尾「る」前是あ段音，不符合一段动词外形，是五段动词。" },
   { id: "owaru", dictionary: "終わる", reading: "おわる", meaning: "结束", type: "godan", reason: "末尾「る」前是あ段音，不符合一段动词外形，是五段动词。" },
-  { id: "iku", dictionary: "行く", reading: "いく", meaning: "去", type: "godan", trap: true, reason: "「行く」本身是五段动词，但它的て形是需要单独记忆的特例。" },
+  { id: "iku", dictionary: "行く", reading: "いく", meaning: "去", type: "godan", trap: true, reason: "「行く」本身是五段动词，只有て形和た形使用需要单独记忆的促音特例。" },
   { id: "kaeru", dictionary: "帰る", reading: "かえる", meaning: "回去", type: "godan", trap: true, reason: "虽然是「え段＋る」的外形，但「帰る」是必须单独记住的五段陷阱动词。" },
   { id: "hairu", dictionary: "入る", reading: "はいる", meaning: "进入", type: "godan", trap: true, reason: "虽然是「い段＋る」的外形，但「入る」是五段陷阱动词。" },
   { id: "hashiru", dictionary: "走る", reading: "はしる", meaning: "跑", type: "godan", trap: true, reason: "虽然是「い段＋る」的外形，但「走る」是五段陷阱动词。" },
@@ -75,6 +75,7 @@ export const VERBS: readonly Verb[] = [
   { id: "teru", dictionary: "照る", reading: "てる", meaning: "照耀", type: "godan", trap: true, reason: "虽然是「え段＋る」的外形，但「照る」是五段陷阱动词。" },
   { id: "nigiru", dictionary: "握る", reading: "にぎる", meaning: "握", type: "godan", trap: true, reason: "虽然是「い段＋る」的外形，但「握る」是五段陷阱动词。" },
   { id: "suru", dictionary: "する", reading: "する", meaning: "做", type: "irregular", reason: "「する」的活用不遵循一段或五段规则，属于不规则动词。" },
+  { id: "benkyou-suru", dictionary: "勉強する", reading: "べんきょうする", meaning: "学习", type: "irregular", reason: "「勉強する」是名词「勉強」加「する」构成的する复合动词，整体按する的不规则规则活用。" },
   { id: "kuru", dictionary: "来る", reading: "くる", meaning: "来", type: "irregular", reason: "「来る」的读音和词干会随活用变化，属于不规则动词。" },
 ] as const;
 

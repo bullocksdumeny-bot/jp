@@ -62,7 +62,7 @@ export default async function HomePage() {
         <p className="text-xs font-medium text-accent">N5 活用</p>
         <h2 className="mt-2 text-xl font-semibold">五种常用活用</h2>
         <p className="mt-2 text-sm leading-6 text-muted">
-          59 个 N5 核心动词，统一练习五种活用；可按题查看规则提示。
+          61 个 N5 核心动词，统一练习五种活用；可按题查看规则提示。
         </p>
         <div className="mt-5 grid grid-cols-3 gap-3 sm:grid-cols-5">
           {[

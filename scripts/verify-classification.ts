@@ -4,9 +4,9 @@ import { VERBS } from "../src/data/verbs";
 import { N5_CORE_VERB_IDS } from "../src/data/n5-core";
 import { classifyVerb, explainClassification } from "../src/lib/classification";
 
-assert.equal(N5_CORE_VERB_IDS.length, 59);
-assert.equal(new Set(N5_CORE_VERB_IDS).size, 59);
-assert.ok(VERBS.length >= 59);
+assert.equal(N5_CORE_VERB_IDS.length, 61);
+assert.equal(new Set(N5_CORE_VERB_IDS).size, 61);
+assert.ok(VERBS.length >= 61);
 assert.equal(new Set(VERBS.map((verb) => verb.id)).size, VERBS.length);
 assert.ok(VERBS.filter((verb) => verb.trap).length >= 9);
 
