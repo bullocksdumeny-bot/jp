@@ -2,8 +2,9 @@
 
 import { useState, type FormEvent } from "react";
 
-import type { TeRule } from "@/data/te-forms";
+import { RuleHint } from "@/app/components/rule-hint";
 import type { Verb } from "@/data/verbs";
+import { ruleHintForQuestion } from "@/lib/training";
 
 type Result = {
   isCorrect: boolean;
@@ -25,10 +26,8 @@ function shuffledIndices(length: number): number[] {
 
 export function TeFormPractice({
   verbs,
-  rules,
 }: {
   verbs: readonly Verb[];
-  rules: readonly TeRule[];
 }) {
   const [order, setOrder] = useState(() =>
     Array.from({ length: verbs.length }, (_, index) => index),
@@ -38,6 +37,7 @@ export function TeFormPractice({
   const [result, setResult] = useState<Result | null>(null);
   const [pending, setPending] = useState(false);
   const verb = verbs[order[position]];
+  const hint = ruleHintForQuestion({ verbId: verb.id, kind: "te" });
 
   async function submit(event: FormEvent) {
     event.preventDefault();
@@ -72,18 +72,6 @@ export function TeFormPractice({
 
   return (
     <div className="flex flex-col gap-7">
-      <details className="rounded-2xl border border-line bg-card p-5">
-        <summary className="cursor-pointer font-semibold">先看て形规则表</summary>
-        <div className="mt-4 grid gap-2 sm:grid-cols-2">
-          {rules.map((rule) => (
-            <div key={rule.id} className="rounded-lg bg-background px-3 py-2 text-sm">
-              <span className="mr-2 text-xs text-muted">{rule.label}</span>
-              <span className="jp font-medium">{rule.formula}</span>
-            </div>
-          ))}
-        </div>
-      </details>
-
       <section className="rounded-2xl border border-line bg-card p-6 text-center">
         <p className="mb-2 text-xs text-muted">
           第 {position + 1} / {verbs.length} 题
@@ -93,12 +81,16 @@ export function TeFormPractice({
         <p className="mt-1 text-sm text-muted">{verb.meaning}</p>
       </section>
 
+      {hint && (
+        <RuleHint key={`${verb.id}:te`} label={hint.label} text={hint.text} />
+      )}
+
       <form onSubmit={submit} className="flex gap-3">
         <input
           value={answer}
           onChange={(event) => setAnswer(event.target.value)}
           disabled={pending || result !== null}
-          placeholder="输入て形，例如：食べて"
+          placeholder="输入て形答案"
           autoCapitalize="off"
           autoComplete="off"
           className="jp min-w-0 flex-1 rounded-xl border border-line bg-card px-4 py-3 text-lg outline-none focus:border-accent"

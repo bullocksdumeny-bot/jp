@@ -2,12 +2,14 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 
+import { RuleHint } from "@/app/components/rule-hint";
 import { VERB_TYPE_LABELS } from "@/lib/classification";
 import type { Verb, VerbType } from "@/data/verbs";
 import {
   buildTargetedQuestions,
   formFromKind,
   QUESTION_LABELS,
+  ruleHintForQuestion,
   type TrainingQuestion,
 } from "@/lib/training";
 
@@ -63,6 +65,7 @@ export function TrainingCenter({
   const verb = question
     ? verbs.find((item) => item.id === question.verbId)
     : undefined;
+  const hint = question ? ruleHintForQuestion(question) : null;
 
   function switchMode(nextMode: Mode) {
     setMode(nextMode);
@@ -224,6 +227,14 @@ export function TrainingCenter({
             <p className="jp mt-2 text-lg text-muted">{verb.reading}</p>
             <p className="mt-1 text-sm text-muted">{verb.meaning}</p>
           </section>
+
+          {hint && (
+            <RuleHint
+              key={`${question.verbId}:${question.kind}`}
+              label={hint.label}
+              text={hint.text}
+            />
+          )}
 
           {question.kind === "classify" ? (
             <div className="grid gap-3 sm:grid-cols-3">

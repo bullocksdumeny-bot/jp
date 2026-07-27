@@ -9,6 +9,7 @@ import {
   kindFromRuleId,
   QUESTION_KINDS,
   routeForKind,
+  ruleHintForQuestion,
   ruleIdForQuestion,
   ruleLabel,
 } from "../src/lib/training";
@@ -22,11 +23,17 @@ for (const id of N5_CORE_VERB_IDS) {
   assert.ok(te);
   assert.equal(kindFromRuleId(te.ruleId), "te");
   assert.notEqual(ruleLabel(te.ruleId), te.ruleId);
+  const teHint = ruleHintForQuestion({ verbId: id, kind: "te" });
+  assert.ok(teHint);
+  assert.equal(teHint.text.includes(te.answer), false);
 
   for (const form of FORM_TYPES) {
     const result = conjugate(verb, form);
     assert.equal(kindFromRuleId(result.ruleId), form);
     assert.notEqual(ruleLabel(result.ruleId), result.ruleId);
+    const hint = ruleHintForQuestion({ verbId: id, kind: form });
+    assert.ok(hint);
+    assert.equal(hint.text.includes(result.answer), false);
   }
 }
 

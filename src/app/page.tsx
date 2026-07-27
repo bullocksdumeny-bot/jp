@@ -9,7 +9,8 @@ const ROADMAP = [
   { phase: "3", name: "第四章 て形全链路（学习 → 规则应用 → 输出 → 掌握度）", done: true },
   { phase: "4", name: "ます形 / ない形 / た形 / たい形", done: true },
   { phase: "5", name: "综合训练 + 错题强化 + 薄弱规则推荐", done: true },
-  { phase: "6", name: "内容生成模块接入 Anthropic API", done: false },
+  { phase: "6", name: "DeepSeek 复习文案与每日学习诊断", done: true },
+  { phase: "7", name: "每日薄弱点针对训练", done: true },
 ];
 
 function Dot({ ok, warn = false }: { ok: boolean; warn?: boolean }) {
@@ -59,14 +60,15 @@ export default async function HomePage() {
 
       <section className="rounded-2xl border border-line bg-card p-6">
         <p className="text-xs font-medium text-accent">N5 活用</p>
-        <h2 className="mt-2 text-xl font-semibold">其他常用变化</h2>
+        <h2 className="mt-2 text-xl font-semibold">五种常用活用</h2>
         <p className="mt-2 text-sm leading-6 text-muted">
-          59 个 N5 核心动词，直接输入答案，按具体词尾规则记录掌握度。
+          59 个 N5 核心动词，统一练习五种活用；可按题查看规则提示。
         </p>
-        <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div className="mt-5 grid grid-cols-3 gap-3 sm:grid-cols-5">
           {[
             ["/masu-form", "ます形"],
             ["/nai-form", "ない形"],
+            ["/te-form", "て形"],
             ["/ta-form", "た形"],
             ["/tai-form", "たい形"],
           ].map(([href, label]) => (
@@ -79,20 +81,6 @@ export default async function HomePage() {
             </Link>
           ))}
         </div>
-      </section>
-
-      <section className="rounded-2xl border border-line bg-card p-6">
-        <p className="text-xs font-medium text-accent">核心训练</p>
-        <h2 className="jp mt-2 text-xl font-semibold">て形输出</h2>
-        <p className="mt-2 text-sm leading-6 text-muted">
-          直接输入变形结果，覆盖全部规则和「行く」特例，写错会给完整推理链。
-        </p>
-        <Link
-          href="/te-form"
-          className="mt-5 inline-flex rounded-xl bg-foreground px-5 py-3 text-sm font-medium text-background"
-        >
-          开始て形训练
-        </Link>
       </section>
 
       <section className="flex flex-col gap-3">

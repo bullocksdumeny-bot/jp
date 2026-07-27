@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { TE_FORMS, TE_RULES } from "@/data/te-forms";
+import { TE_FORMS } from "@/data/te-forms";
 import { findVerb } from "@/data/verbs";
 
 import { TeFormPractice } from "./practice";
@@ -23,7 +23,7 @@ export default function TeFormPage() {
           看辞书形，直接写出て形。写错时会显示完整变形链。
         </p>
       </header>
-      <TeFormPractice verbs={verbs} rules={TE_RULES} />
+      <TeFormPractice verbs={verbs} />
     </main>
   );
 }

@@ -2,8 +2,10 @@
 
 import { useState, type FormEvent } from "react";
 
+import { RuleHint } from "@/app/components/rule-hint";
 import type { Verb } from "@/data/verbs";
 import type { FormType } from "@/lib/conjugation";
+import { QUESTION_LABELS, ruleHintForQuestion } from "@/lib/training";
 
 type Result = {
   isCorrect: boolean;
@@ -26,11 +28,9 @@ function shuffledIndices(length: number): number[] {
 export function FormPractice({
   verbs,
   form,
-  example,
 }: {
   verbs: readonly Verb[];
   form: FormType;
-  example: string;
 }) {
   const [order, setOrder] = useState(() =>
     Array.from({ length: verbs.length }, (_, index) => index),
@@ -40,6 +40,7 @@ export function FormPractice({
   const [result, setResult] = useState<Result | null>(null);
   const [pending, setPending] = useState(false);
   const verb = verbs[order[position]];
+  const hint = ruleHintForQuestion({ verbId: verb.id, kind: form });
 
   async function submit(event: FormEvent) {
     event.preventDefault();
@@ -83,12 +84,16 @@ export function FormPractice({
         <p className="mt-1 text-sm text-muted">{verb.meaning}</p>
       </section>
 
+      {hint && (
+        <RuleHint key={`${verb.id}:${form}`} label={hint.label} text={hint.text} />
+      )}
+
       <form onSubmit={submit} className="flex gap-3">
         <input
           value={answer}
           onChange={(event) => setAnswer(event.target.value)}
           disabled={pending || result !== null}
-          placeholder={`输入答案，例如：${example}`}
+          placeholder={`输入${QUESTION_LABELS[form]}答案`}
           autoCapitalize="off"
           autoComplete="off"
           className="jp min-w-0 flex-1 rounded-xl border border-line bg-card px-4 py-3 text-lg outline-none focus:border-accent"
