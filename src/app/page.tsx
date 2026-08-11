@@ -10,7 +10,6 @@ const ROADMAP = [
   { phase: "4", name: "ます形 / ない形 / た形 / たい形", done: true },
   { phase: "5", name: "综合训练 + 错题强化 + 薄弱规则推荐", done: true },
   { phase: "6", name: "DeepSeek 复习文案与每日学习诊断", done: true },
-  { phase: "7", name: "每日薄弱点针对训练", done: true },
 ];
 
 function Dot({ ok, warn = false }: { ok: boolean; warn?: boolean }) {
