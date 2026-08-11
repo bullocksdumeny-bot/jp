@@ -3,15 +3,6 @@ import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
-const ROADMAP = [
-  { phase: "1", name: "脚手架 + 部署链路", done: true },
-  { phase: "2", name: "第一章 动词分类（含陷阱动词判定模式）", done: true },
-  { phase: "3", name: "第四章 て形全链路（学习 → 规则应用 → 输出 → 掌握度）", done: true },
-  { phase: "4", name: "ます形 / ない形 / た形 / たい形", done: true },
-  { phase: "5", name: "综合训练 + 错题强化 + 薄弱规则推荐", done: true },
-  { phase: "6", name: "DeepSeek 复习文案与每日学习诊断", done: true },
-];
-
 function Dot({ ok, warn = false }: { ok: boolean; warn?: boolean }) {
   const color = ok ? "bg-emerald-500" : warn ? "bg-amber-500" : "bg-red-500";
   return <span className={`inline-block size-2 rounded-full ${color}`} />;
@@ -128,27 +119,6 @@ export default async function HomePage() {
         </p>
       </section>
 
-      <section className="flex flex-col gap-3">
-        <h2 className="text-sm font-medium text-muted">开发进度</h2>
-        <ol className="flex flex-col gap-px overflow-hidden rounded-xl border border-line bg-line">
-          {ROADMAP.map((item) => (
-            <li
-              key={item.phase}
-              className="flex items-center gap-3 bg-card px-4 py-3 text-sm"
-            >
-              <span className="w-5 shrink-0 font-mono text-xs text-muted">
-                {item.phase}
-              </span>
-              <span className={item.done ? "" : "text-muted"}>{item.name}</span>
-              {item.done && (
-                <span className="ml-auto text-xs text-emerald-600 dark:text-emerald-400">
-                  已完成
-                </span>
-              )}
-            </li>
-          ))}
-        </ol>
-      </section>
     </main>
   );
 }
